@@ -6,14 +6,16 @@ This repo illustrates how the autocrop of LexiCam's reverse image search works
 The reverse image search consists of multiple steps involving two round trips.
 
 **1. Autocrop/Bounding box regression**  
-  + Downsampled image is sent to servers
-  + Autocrop model selects region of interest and returns coordinates  
+* Downsampled image is sent to servers
+* Autocrop model selects region of interest and returns coordinates
+  
 **2. Vectorization of the cropped image (metric learning model)**  
-  + Original image is cropped according to coordinates, downsampled and sent to servers
-  + Metric learning model calculates embedding from cropped image  
+* Original image is cropped according to coordinates, downsampled and sent to servers
+* Metric learning model calculates embedding from cropped image
+  
 **3. Approximate kNN search in custom data structure**  
-  + Tree of clusters, ordered by similarity (comparable to FAISS) built on top of MongoDB
-  + Images which have the most similar vectors are returned as results
+* Tree of clusters, ordered by similarity (comparable to FAISS) built on top of MongoDB
+* Images which have the most similar vectors are returned as results
   
 If the entire image search takes longer than 1 second, it will be perceived as slow. Since we need some buffer for resizing the images within the mobile app and sending them to the servers (~65KB for 320x480 and ~25KB for 224x224), we should aim for well below 500ms in ideal network conditions. Steps 2 & 3 together take around 200ms. The target latency for the Autocrop microservice should be between 100-200ms.
 
