@@ -5,13 +5,13 @@ This repo illustrates how the autocrop of LexiCam's reverse image search works
 
 The reverse image search consists of multiple steps involving two round trips.
 
-**1. Autocrop/Bounding box regression**
+**1. Autocrop/Bounding box regression**  
   + Downsampled image is sent to servers
   + Autocrop model selects region of interest and returns coordinates  
-**2. Vectorization of the cropped image (metric learning model)**
+**2. Vectorization of the cropped image (metric learning model)**  
   + Original image is cropped according to coordinates, downsampled and sent to servers
   + Metric learning model calculates embedding from cropped image  
-**3. Approximate kNN search in custom data structure**
+**3. Approximate kNN search in custom data structure**  
   + Tree of clusters, ordered by similarity (comparable to FAISS) built on top of MongoDB
   + Images which have the most similar vectors are returned as results
   
