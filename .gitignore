@@ -1,0 +1,8 @@
+
+Images/*
+roi_test_set_max640/*
+deprecated/*
+*.pkl
+*.csv
+__pycache__/*
+
