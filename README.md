@@ -1,3 +1,4 @@
+
 # Autocrop for LexiCam
 This repo illustrates how the autocrop of LexiCam's reverse image search works
 
