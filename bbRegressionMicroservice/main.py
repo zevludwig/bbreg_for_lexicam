@@ -1,5 +1,5 @@
 #########################################################
-## one endpoint fastapi app to select roi bounding box
+## Endpoint fastapi app to select roi bounding box
 #########################################################
 from io import BytesIO
 from PIL import Image

@@ -6,7 +6,10 @@ shrinked_for_training_bb/
 all_images_full/
 images_to_fix/
 deprecated/
+new/
+*.onnx
 *.pkl
 *.csv
+*.tar.gz
 __pycache__/
 
