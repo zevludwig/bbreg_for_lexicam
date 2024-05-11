@@ -1,7 +1,31 @@
 
 # some file with box
-curl -X POST -F image=@testfiles/louvre_children_1.jpg http://127.0.0.1:5005/detect
+curl -X POST -F image=@testfiles/480_full_40.jpg http://127.0.0.1:5005/detect
+
+# some file with box, lexicam endpoint
+curl -X POST -k -F image=@testfiles/louvre_children_1.jpg https://api.lexicam.app/detect_wo_results
+curl -X POST -k -F image=@testfiles/480_full_40.jpg https://api.lexicam.app/detect_wo_results
+curl -X POST -k -F image=@testfiles/20220203_182107.jpg https://api.lexicam.app/detect_wo_results
+curl -X POST -k -F image=@testfiles/20220206_163458.jpg https://api.lexicam.app/detect_wo_results
+curl -X POST -k -F image=@testfiles/20220206_163749.jpg https://api.lexicam.app/detect_wo_results
+curl -X POST -k -F image=@testfiles/20220206_164336.jpg https://api.lexicam.app/detect_wo_results
+curl -X POST -k -F image=@testfiles/w_small.png https://api.lexicam.app/detect_wo_results
+curl -X POST -k -F image=@testfiles/20220203_190308.jpg https://api.lexicam.app/detect_wo_results
+
+
 
 
 # some empty file
 curl -X POST -F image=@testfiles/w.png http://127.0.0.1:5005/detect
+
+
+
+
+# base64
+# base64
+(echo -n '{"base64": "'; echo -n 'data:image/jpg;base64,' ; base64 testfiles/20220203_190308.jpg; echo '"}') | 
+curl -H "Content-Type: application/json" -k -d @- https://api.lexicam.app/detect_wo_results/base64
+
+
+
+

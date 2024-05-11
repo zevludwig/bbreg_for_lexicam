@@ -1,0 +1,11 @@
+DOCKER_IMAGE=kibae/onnxruntime-server:1.16.3-linux-cpu	
+
+docker pull ${DOCKER_IMAGE}
+
+# simple http backend
+docker run --name onnxruntime_server_container -d --rm \
+  -p 8080:80 \
+  -v "/home/vik/code/surge/bbregression/bbRegressionMicroservice/models:/app/models" \
+  -v "/home/vik/code/surge/bbregression/bbRegressionMicroservice/logs:/app/logs" \
+  -e "ONNX_SERVER_SWAGGER_URL_PATH=/api-docs" \
+  ${DOCKER_IMAGE}
