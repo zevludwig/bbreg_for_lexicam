@@ -35,9 +35,9 @@ At first it was possible to train the model locally, later on I had to switch to
 
 ### Check if more data is useful
 ![graph to test if more data is needed](/readme_images/test_more_data_needed_1050images.png)  
-Since obtaining and labeling data is costly in terms of time, I checked how well the model performed using only fractions of the dataset. This way one can better estimate the relationship between model performance and the amount of data. There is still improvement from using 85% to 100% of the dataset, therefore the model would still benefit from additional data. (Though let's keep in mind that the y-axis showing the loss stops at 0.22.)
+Since obtaining and labeling data is costly in terms of time, I checked how well the model performed using only fractions of the dataset. This way one can better estimate the relationship between model performance and the amount of data. There is still improvement from using 85% to 100% of the dataset, therefore the model would still benefit from additional data. (Though let's keep in mind that the y-axis showing the loss stops at 0.22.)  
 ![learning curve](/learning_curves/fastercnnmobile320_1050images_22epochs_3pred.png)  
-Plotting the training and validation loss vs epochs we can inspect the learning process. The validation loss seems to oscillate around the training loss, which is an indication that the validation set (which is one third in 3 fold cross validation) fails to be represantative for the entire dataset. Again, additional data might be helpful, so I added another 500 images.
+Plotting the training and validation loss vs epochs we can inspect the learning process. The validation loss seems to oscillate around the training loss, which is an indication that the validation set (which is one third in 3 fold cross validation) fails to be represantative for the entire dataset. Again, additional data might be helpful, so I added another 500 images.  
 ![new graph to test if more data is needed](/readme_images/test_more_data_needed_1500images.png)  
 Running the same experiment with 1500 samples shows that the decrease in loss between 1050 samples and 1500 samples was about as large as the decrease from 850 to 1050 samples. Lack of data does not seem to be the biggest problem at this stage.
 
