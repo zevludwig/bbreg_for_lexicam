@@ -2,7 +2,7 @@
 # Autocrop for LexiCam
 This repo illustrates how the autocrop of LexiCam's reverse image search works
 
-![Illustration of algorithm](/readme_images/algo_illustration.png "Reverse image search")
+![Illustration of algorithm](/readme_images/algo_illustration.png "Reverse image search")  
 
 The reverse image search consists of multiple steps involving two round trips.
 
@@ -21,7 +21,7 @@ If the entire image search takes longer than 1 second, it will be perceived as s
 
 
 ### Autocrop task
-![Crop illustration](/readme_images/crop_illustration_small.png)
+![Crop illustration](/readme_images/crop_illustration_small.png)  
 We need to be able to crop two types of objects: paintings and art objects (e.g. vase, jewelry, etc).
 The best way to do that is to take a pretrained object detection model and finetune it to the use case. The classification layer will be calculated in vain but should be computationally negligible compared to the feature extraction part. Pytorch has a couple of [pretrained models](https://pytorch.org/vision/stable/models.html#object-detection) available, including information on their performance (mAP) & computational cost (GFLOPS).
 FasterRCNN is a state-of-the-art object detection model and allows for different network architectures to be used as feature extractor ("backbone"). Benchmarking different backbones on my Linux laptop (which is not much faster than average server instances) leads to only two contenders: Mobilenet V3 with >500ms and Mobilenet320 V3 with ~120ms. Mobilenet320 works with images where 320 denotes to the shorter side of the image. Using Mobilenet320 has the additional benefit of that the smaller size of the image makes sending it over the internet faster. Mobilenet320 is the best choice atm, more computationally demanding models might make sense in combination with quantization and/or GPU servers.
@@ -34,17 +34,17 @@ I use [Optuna](https://optuna.org/) for choosing the appropriate hyperparameters
 At first it was possible to train the model locally, later on I had to switch to Google Colab.
 
 ### Check if more data is useful
-![graph to test if more data is needed](/readme_images/test_more_data_needed_1050images.png)
+![graph to test if more data is needed](/readme_images/test_more_data_needed_1050images.png)  
 Since obtaining and labeling data is costly in terms of time, I checked how well the model performed using only fractions of the dataset. This way one can better estimate the relationship between model performance and the amount of data. There is still improvement from using 85% to 100% of the dataset, therefore the model would still benefit from additional data. (Though let's keep in mind that the y-axis showing the loss stops at 0.22.)
-![learning curve](/learning_curves/fastercnnmobile320_1050images_22epochs_3pred.png)
+![learning curve](/learning_curves/fastercnnmobile320_1050images_22epochs_3pred.png)  
 Plotting the training and validation loss vs epochs we can inspect the learning process. The validation loss seems to oscillate around the training loss, which is an indication that the validation set (which is one third in 3 fold cross validation) fails to be represantative for the entire dataset. Again, additional data might be helpful, so I added another 500 images.
-![new graph to test if more data is needed](/readme_images/test_more_data_needed_1500images.png)
+![new graph to test if more data is needed](/readme_images/test_more_data_needed_1500images.png)  
 Running the same experiment with 1500 samples shows that the decrease in loss between 1050 samples and 1500 samples was about as large as the decrease from 850 to 1050 samples. Lack of data does not seem to be the biggest problem at this stage.
 
 
 ### Artificial training data (augmented images)
 Image augmentation is a way to create new images for training by applying various transformations to original images. [Albumentations](https://albumentations.ai) has a wide range of options. I picked a number of transformations ans settings which I expect to result in realistic images, changing colors, lighting and sharpness substantially and adjusting the crop and perspective slightly.
-![Final training curve](/readme_images/augmentation.png)
+![Final training curve](/readme_images/augmentation.png)  
 This way I increased the number of images for training from about 1500 original images to more than 4700 in total.
 
 ### Serving the model in production
@@ -60,16 +60,16 @@ I chose [FastAPI](https://fastapi.tiangolo.com) to serve the model, because it i
 
 ### Results
 
-![Final training curve](/learning_curves/lr9_30_00004_1.17e-5_0.88.png)
+![Final training curve](/learning_curves/lr9_30_00004_1.17e-5_0.88.png)  
 After trying out many different parameters with Optuna and adjusting the learning rate we get a decent looking learning curve that looks like the model is generalizing well.
 
 
 ### Testing
 Testing the model with images that were not being used in the training process to check that it works:
-![Test set illustration](/readme_images/testing.png)
+![Test set illustration](/readme_images/testing.png)  
 Since I use image augmentation it can happen that two almost identical images are both in the training and test dataset. Therefore I decided to keep a second application test set without augmented images.
-As evaluation metric I use intersection-over-union (IOU) and % of misses.
-Test set:               ~75.0% IOU, 3% misses
+As evaluation metric I use intersection-over-union (IOU) and % of misses.  
+Test set:               ~75.0% IOU, 3% misses  
 Application test set:   ~71.5% IOU, 0% misses
 
 ### Possible ways to further improve the model
